@@ -1,0 +1,6 @@
+python-dotenv
+google-generativeai
+requests
+flask
+discord.py
+gunicorn

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gemini AI Chat</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        #chat-container { border: 1px solid #ccc; height: 400px; overflow-y: scroll; }
+        #message-input { width: 80%; padding: 10px; }
+        #send-button { padding: 10px; }
+    </style>
+</head>
+<body>
+    <div id="chat-container"></div>
+    <input type="text" id="message-input" placeholder="Type your message...">
+    <button id="send-button">Send</button>
+
+    <script>
+        $(document).ready(function() {
+            $('#send-button').click(function() {
+                var message = $('#message-input').val();
+                
+                // Add user message to chat
+                $('#chat-container').append('<p><strong>You:</strong> ' + message + '</p>');
+                
+                // Send message to server
+                $.ajax({
+                    url: '/chat',
+                    type: 'POST',
+                    data: {message: message},
+                    success: function(response) {
+                        // Add bot response to chat
+                        $('#chat-container').append('<p><strong>Bot:</strong> ' + response.response + '</p>');
+                        $('#message-input').val('');
+                        
+                        // Scroll to bottom of chat
+                        $('#chat-container').scrollTop($('#chat-container')[0].scrollHeight);
+                    }
+                });
+            });
+
+            // Allow sending with Enter key
+            $('#message-input').keypress(function(e) {
+                if(e.which == 13) {
+                    $('#send-button').click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
